@@ -3,6 +3,6 @@
     "src"
   ],
   "ext": ".ts,.js",
-  "ignore": ["./src/test/*", "*.config", "*.js" ],
+  "ignore": ["*.test.*", "*.config", "*.js" ],
   "exec": "ts-node ./src/index.ts"
 }
