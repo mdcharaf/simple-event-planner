@@ -3,6 +3,7 @@ import { Event, IEvent } from '../db/models/event';
 export interface IEventRepository {
   create(event: IEvent): Promise<IEvent>;
   find(id: string): Promise<IEvent>;
+  list(): Promise<IEvent[]>;
 }
 
 export class EventRepository implements IEventRepository {
@@ -12,6 +13,10 @@ export class EventRepository implements IEventRepository {
 
   async find(id: string): Promise<IEvent> {
     return await Event.findByPk(id);
+  }
+
+  async list(): Promise<IEvent[]> {
+    return await Event.findAll();
   }
 }
 

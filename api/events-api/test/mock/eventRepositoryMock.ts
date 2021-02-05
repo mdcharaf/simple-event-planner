@@ -6,6 +6,12 @@ export class EventRepositoryMock implements IEventRepository {
   constructor(private readonly event: IEvent = ModelFactory.makeEvent()) {
   }
 
+  async list(): Promise<IEvent[]> {
+    return [
+      ModelFactory.makeEvent()
+    ] as IEvent[];
+  }
+
   async create(event: IEvent): Promise<IEvent> {
     return event
   }
