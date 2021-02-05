@@ -14,18 +14,22 @@ async function initializeDb() {
   }
 }
 
+function serve(): Express {
+  const app: Express = express();
+  const PORT = process.env.PORT || 8080;
+
+  app.get('/', (req: Request, res: Response) => res.send('Express + TypeScript Server'));
+
+  app.listen(PORT, () => {
+    console.log(`⚡️[server]: Server is running at https://localhost:${PORT}`);
+  });
+
+  return app;
+}
+
 (async () => {
   dotenv.config({ path: `${__dirname}/.env` });
-
   await initializeDb();
-
-  // const app: Express = express();
-  // const PORT = process.env.PORT || 8080;
-  // console.log('Events db synced');
-
-  // app.get('/', (req: Request, res: Response) => res.send('Express + TypeScript Server'));
-  // app.listen(PORT, () => {
-  //   console.log(`⚡️[server]: Server is running at https://localhost:${PORT}`);
-  // });
+  serve();
 })();
 
