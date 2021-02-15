@@ -20,4 +20,11 @@ export class EventRepositoryMock implements IEventRepository {
     return this.event;
   }
 
+  async remove(id: string): Promise<boolean> {
+    return true;
+  }
+
+  async update(event: IEvent): Promise<IEvent> {
+    return event;
+  }
 }
