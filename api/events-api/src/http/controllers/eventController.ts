@@ -1,10 +1,8 @@
-import { resolveNaptr } from 'dns';
-import express, { Request, Response, Router } from 'express';
+import { Request, Response, Router } from 'express';
 import { IEvent } from '../../db/models/event';
-import { makeEventRepository } from '../../repo/eventRepository';
 import { IEventService, makeEventService } from '../../services/eventService';
 
-class EventController {
+export class EventController {
   private readonly eventService: IEventService;
 
   constructor(eventService: IEventService) {
@@ -76,27 +74,3 @@ class EventController {
     return event;
   }
 }
-
-// Routes
-
-const controller: EventController = new EventController(makeEventService(makeEventRepository()));
-const router: Router = express.Router();
-
-router.post('/', async (req:Request, res: Response) => {
-  return await controller.post(req, res);
-});
-
-router.get('/', async (req:Request, res: Response) => {
-  return await controller.get(req, res);
-});
-
-router.delete('/:id', async (req:Request, res: Response) => {
-  return await controller.delete(req, res);
-});
-
-router.put('/:id', async (req:Request, res: Response) => {
-  return await controller.put(req, res);
-});
-
-
-export const EventRouter: Router = router;

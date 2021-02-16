@@ -1,6 +1,5 @@
-import { resolveNaptr } from 'dns';
 import { Router, Request, Response } from 'express';
-import { EventRouter } from './controllers/eventController'
+import { EventRouter } from './eventRouter';
 
 const router: Router = Router();
 
