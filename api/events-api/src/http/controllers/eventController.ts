@@ -4,7 +4,6 @@ import { IEvent } from '../../db/models/event';
 import { makeEventRepository } from '../../repo/eventRepository';
 import { IEventService, makeEventService } from '../../services/eventService';
 
-
 class EventController {
   private readonly eventService: IEventService;
 
@@ -35,6 +34,27 @@ class EventController {
   public async get(request: Request, response: Response) {
     try {
       const data = await this.eventService.listEvents();
+      return response.status(200).json({ data });
+    } catch (error) {
+      return response.status(400).json({ error: error.message });
+    }
+  }
+
+  public async delete(request: Request, response: Response) {
+    try {
+      const { id } = request.params;
+      await this.eventService.removeEvent(id);
+      return response.status(200).json({ message: 'Successfully Deleted' });
+    } catch (error) {
+      return response.status(400).json({ error: error.message });
+    }
+  }
+
+  public async put(request: Request, response: Response)  {
+    try {
+      const inputEvent = this.mapRequestToEventModel(request);
+      inputEvent.id = request.params.id;
+      const data = await this.eventService.updateEvent(inputEvent)
 
       return response.status(200).json({ data });
     } catch (error) {
@@ -70,9 +90,13 @@ router.get('/', async (req:Request, res: Response) => {
   return await controller.get(req, res);
 });
 
-// eventRouter.get('/event', async (req: Request, res: Response) => {
-//   const events: IEvent[] = await eventService.listEvents();
-//   return res.json({ events });
-// });
+router.delete('/:id', async (req:Request, res: Response) => {
+  return await controller.delete(req, res);
+});
+
+router.put('/:id', async (req:Request, res: Response) => {
+  return await controller.put(req, res);
+});
+
 
 export const EventRouter: Router = router;
