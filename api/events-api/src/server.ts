@@ -1,7 +1,10 @@
 import express, { Express, Request, Response } from 'express';
-import { makeDbContext } from "./db/dbContext";
-import { Sequelize } from "sequelize-typescript";
-import { Models } from "./db/models/model.index";
+import { makeDbContext } from './db/dbContext';
+import { Sequelize } from 'sequelize-typescript';
+import { Models } from './db/models/model.index';
+import { IndexRouter } from './http/routes';
+import bodyParser from 'body-parser';
+import cors from 'cors';
 import * as dotenv from 'dotenv';
 
 async function initializeDb() {
@@ -18,10 +21,22 @@ function serve(): Express {
   const app: Express = express();
   const PORT = process.env.PORT || 8080;
 
-  app.get('/', (req: Request, res: Response) => res.send('Express + TypeScript Server'));
+  app.use(bodyParser.json())
+  app.use('/api/v0/', IndexRouter);
+  app.use(cors({
+    allowedHeaders: [
+      'Origin', 'X-Requested-With',
+      'Content-Type', 'Accept',
+      'X-Access-Token', 'Authorization',
+    ],
+    methods: 'GET,HEAD,OPTIONS,PUT,PATCH,POST,DELETE',
+    origin: process.env.URL,
+  }));
+
+  app.get('/', (req: Request, res: Response) => res.send('Express + TypeScript Server '));
 
   app.listen(PORT, () => {
-    console.log(`⚡️[server]: Server is running at https://localhost:${PORT}`);
+    console.log(`⚡️[server]: Server is running at ${process.env.URL}`);
   });
 
   return app;
