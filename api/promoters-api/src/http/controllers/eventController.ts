@@ -9,66 +9,76 @@ export class EventController {
     this.eventService = eventService;
   }
 
-  public async post(request: Request, response: Response) {
+  async post(req: Request, res: Response) {
     try {
       let event: IEvent = {
         id: Date.now().toString(),
-        title: request.body.title,
-        subtitle: request.body.subtitle,
-        description: request.body.description,
-        date: new Date(request.body.date),
-        ticketPrice: request.body.ticketPrice,
-        address: request.body.address
+        title: req.body.title,
+        subtitle: req.body.subtitle,
+        description: req.body.description,
+        date: new Date(req.body.date),
+        ticketPrice: req.body.ticketPrice,
+        address: req.body.address
       } as IEvent;
 
       const result = await this.eventService.createEvent(event)
-      return response.status(200).json(result)
+      return res.status(200).json(result)
 
     } catch (error) {
-      return response.status(400).json(error);
+      return res.status(400).json(error);
     }
   }
 
-  public async get(request: Request, response: Response) {
+  async get(req: Request, res: Response) {
     try {
       const data = await this.eventService.listEvents();
-      return response.status(200).json({ data });
+      return res.status(200).json({ data });
     } catch (error) {
-      return response.status(400).json({ error: error.message });
+      return res.status(400).json({ error: error.message });
     }
   }
 
-  public async delete(request: Request, response: Response) {
+  async delete(req: Request, res: Response) {
     try {
-      const { id } = request.params;
+      const { id } = req.params;
       await this.eventService.removeEvent(id);
-      return response.status(200).json({ message: 'Successfully Deleted' });
+      return res.status(200).json({ message: 'Successfully Deleted' });
     } catch (error) {
-      return response.status(400).json({ error: error.message });
+      return res.status(400).json({ error: error.message });
     }
   }
 
-  public async put(request: Request, response: Response)  {
+  async put(req: Request, res: Response) {
     try {
-      const inputEvent = this.mapRequestToEventModel(request);
-      inputEvent.id = request.params.id;
+      const inputEvent = this.mapRequestToEventModel(req);
+      inputEvent.id = req.params.id;
       const data = await this.eventService.updateEvent(inputEvent)
 
-      return response.status(200).json({ data });
+      return res.status(200).json({ data });
     } catch (error) {
-      return response.status(400).json({ error: error.message });
+      return res.status(400).json({ error: error.message });
+    }
+  }
+  
+  async publish(req: Request, res: Response) {
+    try {
+      const { id } = req.params;
+      const data = await this.eventService.publishEvent(id);
+      return res.status(200).json({ data });
+    } catch (error) {
+      return res.status(400).json({ error: error.message });
     }
   }
 
-  private mapRequestToEventModel(request: Request): IEvent {
+  private mapRequestToEventModel(req: Request): IEvent {
     let event: IEvent = {
       id: Date.now().toString(),
-      title: request.body.title,
-      subtitle: request.body.subtitle,
-      description: request.body.description,
-      date: new Date(request.body.date),
-      ticketPrice: request.body.ticketPrice,
-      address: request.body.address
+      title: req.body.title,
+      subtitle: req.body.subtitle,
+      description: req.body.description,
+      date: new Date(req.body.date),
+      ticketPrice: req.body.ticketPrice,
+      address: req.body.address
     } as IEvent;
 
     return event;

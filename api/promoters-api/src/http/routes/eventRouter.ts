@@ -22,5 +22,9 @@ router.put('/:id', async (req:Request, res: Response) => {
   return await controller.put(req, res);
 });
 
+router.post('/:id/publish', async (req: Request, res: Response) => {
+  return await controller.publish(req, res);
+});
+
 
 export const EventRouter: Router = router;

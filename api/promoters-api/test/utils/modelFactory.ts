@@ -10,6 +10,7 @@ export default {
       date: new Date(2021, 12, 12),
       ticketPrice: 3250,
       address: 'Degla Maadi ST 206, Cairo',
+      isPublished: false,
       createdAt: new Date(2020, 12, 12),
       updatedAt: new Date(2020, 12, 12),
     } as IEvent;

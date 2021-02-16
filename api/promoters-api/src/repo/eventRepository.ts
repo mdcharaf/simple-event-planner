@@ -27,7 +27,7 @@ export class EventRepository implements IEventRepository {
 
     return result;
   }
-
+  
   async find(id: string): Promise<IEvent> {
     return await Event.findByPk(id);
   }

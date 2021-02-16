@@ -7,6 +7,7 @@ export interface IEventService {
   listEvents(): Promise<IEvent[]>;
   findEvent(eventId: string): Promise<IEvent>;
   removeEvent(eventId: string): Promise<boolean>;
+  publishEvent(eventId: string): Promise<IEvent>;
 };
 
 export class EventService implements IEventService {
@@ -36,6 +37,13 @@ export class EventService implements IEventService {
   async removeEvent(eventId: string): Promise<boolean> {
     await this.repo.remove(eventId);
     return true;
+  }
+
+  async publishEvent(eventId: string): Promise<IEvent> {
+    const event = await this.findEvent(eventId);
+    event.isPublished = true;
+    await this.updateEvent(event);
+    return event;
   }
 }
 
