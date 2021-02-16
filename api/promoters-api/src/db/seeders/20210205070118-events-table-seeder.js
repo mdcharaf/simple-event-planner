@@ -10,6 +10,7 @@ module.exports = {
       date: new Date(2021, 12, 12),
       ticketPrice: 3250,
       address: 'Cairo Festival City Mall, 5th Settlment Cairo Egypt',
+      isPublished: false,
       createdAt: new Date(2020, 12, 12),
       updatedAt: new Date(2020, 12, 12),
     }], {});
