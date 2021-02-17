@@ -1,7 +1,7 @@
 import express, { Express, Request, Response } from 'express';
 import { makeDbContext } from './db/dbContext';
 import { Sequelize } from 'sequelize-typescript';
-import { Models } from './db/models/model.index';
+import { Models } from './db/models.index';
 import { IndexRouter } from './http/routes';
 import bodyParser from 'body-parser';
 import cors from 'cors';
