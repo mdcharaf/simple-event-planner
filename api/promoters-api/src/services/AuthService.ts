@@ -1,6 +1,6 @@
 import * as bcrypt from 'bcrypt';
 import * as jwt from 'jsonwebtoken';
-import { IPromoter, Promotoer } from '../db/models/promoter';
+import { IPromoter, Promoter } from '../db/models/promoter';
 
 export interface IAuthSeevice {
   hashPassword(passwordString: string): Promise<string>;
@@ -9,6 +9,8 @@ export interface IAuthSeevice {
   generateJWT(email: string, secret: string): string;
   authenticate(token: string, secret: string): boolean;
   registerPromoter(username: string, email: string, password: string): Promise<IPromoter>;
+  findPromoter(email: string): Promise<IPromoter>;
+  updatePromoterToken(id: string, jwt: string): Promise<void>;
 };
 
 
@@ -17,7 +19,7 @@ class AuthService implements IAuthSeevice {
   async registerPromoter(username: string, email: string, password: string): Promise<IPromoter> {
     const hashedPassword: string = await this.hashPassword(password);
     const jwt: string = this.generateJWT(email, process.env.SECRET as string);
-    const result = Promotoer.create({ username, email, password: hashedPassword, jwt });
+    const result = Promoter.create({ username, email, password: hashedPassword, jwt });
     return result
   }
 
@@ -41,13 +43,33 @@ class AuthService implements IAuthSeevice {
   }
 
   authenticate(token: string, secret: string): boolean {
-    let authenticated: boolean = false;
+    return true;
+    // return !jwt.verify(token, secret);
+  }
 
-    jwt.verify(token, secret, (err, _) => {
-      authenticated = !err;
+  async findPromoter(email: string): Promise<IPromoter> {
+    console.log('test');
+    
+    const result: Promoter[]  = await Promoter.findAll({
+      where: {
+        email
+      }
     });
 
-    return authenticated;
+    console.log('after');
+    
+
+    if (!result || result.length === 0) {
+      return null as unknown as IPromoter;
+    }
+
+    return result[0] as IPromoter;
+  }
+
+  async updatePromoterToken(id: string, jwt: string) {
+    const promoter: Promoter = await Promoter.findByPk(id);
+    promoter.jwt = jwt;
+    promoter.save();
   }
 }
 

@@ -1,4 +1,4 @@
 import { Event } from './models/event';
-import { Promotoer } from './models/promoter';
+import { Promoter } from './models/promoter';
 
-export const Models = [Event, Promotoer]
+export const Models = [Event, Promoter]

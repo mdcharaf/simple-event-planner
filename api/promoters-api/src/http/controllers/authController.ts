@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { IPromoter } from '../../db/models/promoter';
-import { IAuthSeevice } from '../../services/AuthService';
+import { IAuthSeevice } from '../../services/authService';
 
 export class AuthController {
   private readonly authService: IAuthSeevice;
@@ -49,5 +49,20 @@ export class AuthController {
       return res.status(400).json({ auth: false, message: 'Password is required' });
     }
 
+    const promoter: IPromoter = await this.authService.findPromoter(email);
+    if (!promoter) {
+      return res.status(401).json({ auth: false, message: 'Promoter was not found..' });
+    }
+
+    const isAuthenticated: boolean = await this.authService.validatePassword(password, promoter.password);
+
+    if (!isAuthenticated) {
+      return res.status(401).json({ auth: false, message: 'Invalid email or password' });
+    }
+
+    const jwt: string = this.authService.generateJWT(email, process.env.SECRET as string);
+    await this.authService.updatePromoterToken(promoter.id.toString(), jwt);
+    
+    return res.status(200).json({ auth: true, token: jwt })
   }
 }

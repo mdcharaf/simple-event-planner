@@ -1,4 +1,4 @@
-import { Table, Column, Model, PrimaryKey, CreatedAt, UpdatedAt, DataType, AutoIncrement } from 'sequelize-typescript';
+import { Table, Column, Model, PrimaryKey, CreatedAt, UpdatedAt, DataType, AutoIncrement, Unique } from 'sequelize-typescript';
 
 export interface IPromoter {
   id: Number,
@@ -11,7 +11,7 @@ export interface IPromoter {
 };
 
 @Table
-export class Promotoer extends Model<IPromoter> {
+export class Promoter extends Model<IPromoter> {
   @PrimaryKey
   @AutoIncrement
   @Column(DataType.INTEGER)
