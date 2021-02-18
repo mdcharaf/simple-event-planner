@@ -3,7 +3,7 @@ import { makeAuthService } from '../../services/authService';
 
 const authService = makeAuthService();
 
-export function auth(req: Request, res: Response, next: NextFunction) {
+export async function auth(req: Request, res: Response, next: NextFunction) {
   if (!req.headers || !req.headers.authorization) {
     return res.status(401).send({ message: 'No authorization headers.' });
   }
@@ -14,7 +14,7 @@ export function auth(req: Request, res: Response, next: NextFunction) {
   }
 
   const token = tokenBearer[1];
-  if (!authService.authenticate(token, process.env.SECRET as string)) {
+  if (!(await authService.authenticate(token, process.env.SECRET as string))) {
     return res.status(403).json({ auth: false, message: 'Failed to authenticate.' });
   }
 

@@ -7,7 +7,7 @@ export interface IAuthSeevice {
   validatePassword(passwordString: string, passwordHash: string): Promise<boolean>;
   validateEmail(email: string): boolean;
   generateJWT(email: string, secret: string): string;
-  authenticate(token: string, secret: string): boolean;
+  authenticate(token: string, secret: string): Promise<boolean>;
   registerPromoter(username: string, email: string, password: string): Promise<IPromoter>;
   findPromoter(email: string): Promise<IPromoter>;
   updatePromoterToken(id: string, jwt: string): Promise<void>;
@@ -42,9 +42,18 @@ class AuthService implements IAuthSeevice {
     return jwt.sign(email, secret);
   }
 
-  authenticate(token: string, secret: string): boolean {
+  async authenticate(token: string, secret: string): Promise<boolean> {
+    const result: Promoter[] = await Promoter.findAll({
+      where: {
+        jwt: token
+      }
+    });
+
+    if (!result || result.length === 0) {
+      return false;
+    }
+
     return true;
-    // return !jwt.verify(token, secret);
   }
 
   async findPromoter(email: string): Promise<IPromoter> {
