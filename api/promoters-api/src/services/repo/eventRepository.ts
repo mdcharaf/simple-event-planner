@@ -14,7 +14,7 @@ export class EventRepository implements IEventRepository {
   }
 
   async update(event: IEvent): Promise<IEvent> {
-    const dbEvent: Event = await Event.findByPk(event.id);
+    const dbEvent: Event = await Event.findByPk(event.id) as Event;
 
     const result = await dbEvent.update({
       title: event.title,
@@ -29,7 +29,7 @@ export class EventRepository implements IEventRepository {
   }
   
   async find(id: string): Promise<IEvent> {
-    return await Event.findByPk(id);
+    return await Event.findByPk(id) as Event;
   }
 
   async list(): Promise<IEvent[]> {

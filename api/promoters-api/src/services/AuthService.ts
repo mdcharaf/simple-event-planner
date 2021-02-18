@@ -71,7 +71,7 @@ class AuthService implements IAuthSeevice {
   }
 
   async updatePromoterToken(id: string, jwt: string) {
-    const promoter: Promoter = await Promoter.findByPk(id);
+    const promoter: Promoter = await Promoter.findByPk(id) as Promoter;
     promoter.jwt = jwt;
     promoter.save();
   }

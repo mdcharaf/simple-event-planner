@@ -8,7 +8,7 @@ export interface IEvent {
   date: Date,
   ticketPrice: Number,
   address: string,
-  isPublished: boolean,
+  isPublished: Boolean,
   createdAt: Date,
   updatedAt: Date,
 };
