@@ -57,16 +57,11 @@ class AuthService implements IAuthSeevice {
   }
 
   async findPromoter(email: string): Promise<IPromoter> {
-    console.log('test');
-    
     const result: Promoter[]  = await Promoter.findAll({
       where: {
         email
       }
     });
-
-    console.log('after');
-    
 
     if (!result || result.length === 0) {
       return null as unknown as IPromoter;
