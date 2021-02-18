@@ -1,5 +1,5 @@
 import { IEvent } from '../db/models/event';
-import { IEventRepository } from "../repo/eventRepository";
+import { IEventRepository } from "./repo/eventRepository";
 
 export interface IEventService {
   createEvent(event: IEvent): Promise<IEvent>;

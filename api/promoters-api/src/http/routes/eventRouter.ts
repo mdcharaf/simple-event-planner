@@ -1,5 +1,5 @@
 import { Router, Request, Response } from 'express';
-import { makeEventRepository } from '../../repo/eventRepository';
+import { makeEventRepository } from '../../services/repo/eventRepository';
 import { makeEventService } from '../../services/eventService';
 import { EventController } from '../controllers/eventController';
 

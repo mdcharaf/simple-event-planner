@@ -1,5 +1,5 @@
 import { IEventService, makeEventService } from '../../src/services/eventService';
-import { IEventRepository } from '../../src/repo/eventRepository';
+import { IEventRepository } from '../../src/services/repo/eventRepository';
 import { IEvent } from '../../src/db/models/event';
 import { EventRepositoryMock } from '../mock/eventRepositoryMock';
 import ModelFactory from '../utils/modelFactory';

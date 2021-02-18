@@ -1,5 +1,5 @@
 import { IEvent } from '../../src/db/models/event';
-import { IEventRepository } from '../../src/repo/eventRepository';
+import { IEventRepository } from '../../src/services/repo/eventRepository';
 import ModelFactory from '../utils/modelFactory';
 
 export class EventRepositoryMock implements IEventRepository {
