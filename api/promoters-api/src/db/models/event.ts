@@ -9,7 +9,7 @@ export interface IEvent {
   ticketPrice: Number,
   address: string,
   isPublished: Boolean,
-  promoterId: Number,
+  promoterId: Number;
   createdAt: Date,
   updatedAt: Date,
 };
@@ -41,8 +41,8 @@ export class Event extends Model<Event> {
   @Column(DataType.BOOLEAN)
   public isPublished: Boolean = false;
 
-  @Column(DataType.NUMBER)
-  public promoterId: Number = -1;
+  @Column(DataType.INTEGER)
+  public promoterId!: Number;
 
   @Column(DataType.DATE)
   @CreatedAt
