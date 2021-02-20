@@ -14,27 +14,24 @@ export class AuthController {
     const password = req.body.password;
     const email = req.body.email;
 
-    if (!username || username.length < 3) {
-      return res.status(400).json({ message: 'Invalid Username (Length must be greater than 2)' });
+    try {
+      await this.authService.CheckUsernameAndEmail(username, email);
+      await this.authService.CheckPassword(password);
+    } catch (error) {
+      return res.status(422).json({ error: error.message });
     }
 
-    if (!email || !this.authService.validateEmail(email)) {
-      return res.status(400).json({ message: 'Email is required or malformed.' });
+    try {
+      const promoter = await this.authService.registerPromoter(username, email, password);
+      return res.status(200).json({
+        data: {
+          username: promoter.username,
+          email: promoter.email,
+        }
+      });
+    } catch (error) {
+      return res.status(400).json({ error: error.message });
     }
-
-    if (!password || password.length < 6) {
-      return res.status(400).json({ message: 'Email is required or malformed.' });
-    }
-
-    const promoter = await this.authService.registerPromoter(username, email, password);
-
-    res.status(200).json({
-      data: {
-        username: promoter.username,
-        email: promoter.email,
-        jwt: promoter.jwt
-      }
-    });
   }
 
   async login(req: Request, res: Response) {
@@ -60,9 +57,9 @@ export class AuthController {
       return res.status(401).json({ auth: false, message: 'Invalid email or password' });
     }
 
-    const jwt: string = this.authService.generateJWT(email, process.env.SECRET as string);
+    const jwt: string = this.authService.generateToken();
     await this.authService.updatePromoterToken(promoter.id.toString(), jwt);
-    
-    return res.status(200).json({ auth: true, token: jwt })
+
+    return res.status(200).json({ auth: true, userId: promoter.id, token: jwt })
   }
 }

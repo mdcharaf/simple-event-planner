@@ -1,29 +1,37 @@
 import * as bcrypt from 'bcrypt';
-import * as jwt from 'jsonwebtoken';
+import * as Randomstring from 'randomstring';
+import { Sequelize } from 'sequelize/types';
 import { IPromoter, Promoter } from '../db/models/promoter';
 
 export interface IAuthSeevice {
-  hashPassword(passwordString: string): Promise<string>;
+  hashString(passwordString: string): Promise<string>;
   validatePassword(passwordString: string, passwordHash: string): Promise<boolean>;
   validateEmail(email: string): boolean;
-  generateJWT(email: string, secret: string): string;
-  authenticate(token: string, secret: string): Promise<boolean>;
+  generateToken(): string;
+  authenticate(token: string): Promise<boolean>;
   registerPromoter(username: string, email: string, password: string): Promise<IPromoter>;
   findPromoter(email: string): Promise<IPromoter>;
   updatePromoterToken(id: string, jwt: string): Promise<void>;
+  CheckUsernameAndEmail(username: string, email: string): Promise<void>;
+  CheckPassword(password: string): Promise<void>;
 };
 
 
 class AuthService implements IAuthSeevice {
 
   async registerPromoter(username: string, email: string, password: string): Promise<IPromoter> {
-    const hashedPassword: string = await this.hashPassword(password);
-    const jwt: string = this.generateJWT(email, process.env.SECRET as string);
-    const result = Promoter.create({ username, email, password: hashedPassword, jwt });
-    return result
+    const hashedPassword: string = await this.hashString(password);
+    const jwt: string = this.generateToken();
+    Promoter.create({
+      username,
+      email,
+      password: hashedPassword,
+      jwt
+    });
+    return { username, email, jwt } as IPromoter;
   }
 
-  async hashPassword(passwordString: string): Promise<string> {
+  async hashString(passwordString: string): Promise<string> {
     const saltRounds = 10;
     const salt = await bcrypt.genSalt(saltRounds);
     return await bcrypt.hash(passwordString, salt);
@@ -38,11 +46,11 @@ class AuthService implements IAuthSeevice {
     return regex.test(String(email.toLowerCase()));
   }
 
-  generateJWT(email: string, secret: string): string {
-    return jwt.sign(email, secret);
+  generateToken(): string {
+    return Randomstring.generate({ length: 20 });
   }
 
-  async authenticate(token: string, secret: string): Promise<boolean> {
+  async authenticate(token: string): Promise<boolean> {
     const result: Promoter[] = await Promoter.findAll({
       where: {
         jwt: token
@@ -57,7 +65,7 @@ class AuthService implements IAuthSeevice {
   }
 
   async findPromoter(email: string): Promise<IPromoter> {
-    const result: Promoter[]  = await Promoter.findAll({
+    const result: Promoter[] = await Promoter.findAll({
       where: {
         email
       }
@@ -74,6 +82,40 @@ class AuthService implements IAuthSeevice {
     const promoter: Promoter = await Promoter.findByPk(id) as Promoter;
     promoter.jwt = jwt;
     promoter.save();
+  }
+
+  async CheckUsernameAndEmail(username: string, email: string): Promise<void> {
+    if (!username || username.length < 3) {
+      throw new Error("Username length should be greater than 2");
+    }
+
+    if (!email || email.length < 3) {
+      throw new Error("Email length should be greater than 2");
+    }
+
+    let result: Promoter[] = await Promoter.findAll({
+      where: {
+        email
+      }
+    });
+    if (result.length > 0) {
+      throw new Error("Email already exist");
+    }
+
+    result = await Promoter.findAll({
+      where: {
+        username
+      }
+    });
+    if (result.length > 0) {
+      throw new Error("Username already exist");
+    }
+  }
+
+  async CheckPassword(password: string): Promise<void> {
+    if (password.length < 6) {
+      throw new Error("Password length should be greater that 5");
+    }
   }
 }
 

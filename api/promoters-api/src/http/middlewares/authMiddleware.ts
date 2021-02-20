@@ -1,4 +1,4 @@
-import { NextFunction, Request, Response } from 'express';
+import { NextFunction, request, Request, Response } from 'express';
 import { makeAuthService } from '../../services/authService';
 
 const authService = makeAuthService();
@@ -14,7 +14,7 @@ export async function auth(req: Request, res: Response, next: NextFunction) {
   }
 
   const token = tokenBearer[1];
-  if (!(await authService.authenticate(token, process.env.SECRET as string))) {
+  if (!(await authService.authenticate(token))) {
     return res.status(403).json({ auth: false, message: 'Failed to authenticate.' });
   }
 
