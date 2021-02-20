@@ -4,7 +4,7 @@ export interface IEventRepository {
   create(event: IEvent): Promise<IEvent>;
   update(event: IEvent): Promise<IEvent>;
   find(id: string): Promise<IEvent>;
-  list(): Promise<IEvent[]>;
+  list(promoterId: number): Promise<IEvent[]>;
   remove(id: string): Promise<boolean>;
 }
 
@@ -32,8 +32,12 @@ export class EventRepository implements IEventRepository {
     return await Event.findByPk(id) as Event;
   }
 
-  async list(): Promise<IEvent[]> {
-    return await Event.findAll();
+  async list(promoterId: number): Promise<IEvent[]> {
+    return await Event.findAll({
+      where: {
+        promoterId
+      }
+    });
   }
 
   async remove(id: string): Promise<boolean> {

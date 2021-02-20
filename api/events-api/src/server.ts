@@ -3,9 +3,9 @@ import { makeDbContext } from './db/dbContext';
 import { Sequelize } from 'sequelize-typescript';
 import { Models } from './db/models.index';
 import { IndexRouter } from './http/routes';
+import { config } from './config';
 import bodyParser from 'body-parser';
 import cors from 'cors';
-import * as dotenv from 'dotenv';
 
 async function initializeDb() {
   try {
@@ -19,7 +19,7 @@ async function initializeDb() {
 
 function serve(): Express {
   const app: Express = express();
-  const PORT = process.env.PORT || 8080;
+  const PORT = config.PORT || 8080;
 
   app.use(bodyParser.json())
   app.use('/api/v0/', IndexRouter);
@@ -30,20 +30,19 @@ function serve(): Express {
       'X-Access-Token', 'Authorization',
     ],
     methods: 'GET,HEAD,OPTIONS,PUT,PATCH,POST,DELETE',
-    origin: process.env.URL,
+    origin: config.PORT,
   }));
 
   app.get('/', (req: Request, res: Response) => res.send('Express + TypeScript Server '));
 
   app.listen(PORT, () => {
-    console.log(`⚡️[server]: Server is running at ${process.env.URL}`);
+    console.log(`⚡️[server]: Server is running at ${config.URL}`);
   });
 
   return app;
 }
 
 (async () => {
-  dotenv.config({ path: `${__dirname}/.env` });
   await initializeDb();
   serve();
 })();

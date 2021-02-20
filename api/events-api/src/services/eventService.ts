@@ -4,7 +4,7 @@ import { IEventRepository } from "./repo/eventRepository";
 export interface IEventService {
   createEvent(event: IEvent): Promise<IEvent>;
   updateEvent(event: IEvent): Promise<IEvent>;
-  listEvents(): Promise<IEvent[]>;
+  listEvents(promoterId: number): Promise<IEvent[]>;
   findEvent(eventId: string): Promise<IEvent>;
   removeEvent(eventId: string): Promise<boolean>;
   publishEvent(eventId: string): Promise<IEvent>;
@@ -25,8 +25,8 @@ export class EventService implements IEventService {
     return this.repo.update(event);
   }
 
-  async listEvents(): Promise<IEvent[]> {
-    const result: IEvent[] = await this.repo.list();
+  async listEvents(promoterId: number): Promise<IEvent[]> {
+    const result: IEvent[] = await this.repo.list(promoterId);
     return result;
   }
 

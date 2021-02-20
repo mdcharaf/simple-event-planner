@@ -1,14 +1,15 @@
 import { Promoter } from '../db/models/promoter';
 
 export interface IAuthSeevice {
-  authenticate(token: string): Promise<boolean>;
+  authenticate(promoterId: Number, token: string): Promise<boolean>;
 };
 
 class AuthService implements IAuthSeevice {
 
-  async authenticate(token: string): Promise<boolean> {
+  async authenticate(promoterId: number, token: string): Promise<boolean> {
     const result: Promoter[] = await Promoter.findAll({
       where: {
+        id: promoterId,
         jwt: token
       }
     });

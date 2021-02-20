@@ -7,7 +7,7 @@ import { auth } from '../middlewares/authMiddleware';
 const controller: EventController = new EventController(makeEventService(makeEventRepository()));
 const router: Router = Router();
 
-router.post('/', async (req: Request, res: Response) => {
+router.post('/', auth, async (req: Request, res: Response) => {
   return await controller.post(req, res);
 });
 

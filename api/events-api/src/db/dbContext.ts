@@ -1,16 +1,18 @@
 import { Sequelize } from "sequelize-typescript";
+import { config } from '../config';
 
 export async function makeDbContext() {
-  const dbName = process.env.DB_NAME as string;
-  const username = process.env.DB_USERNAME as string;
-  const password = process.env.DB_PASSWORD as string;
-  const host = process.env.DB_HOST as string;
+  const dbName = config.database;
+  const username = config.username;
+  const password = config.password;
+  const host = config.host;
+  const dialect = config.dialect;
 
   const dbContext: Sequelize = new Sequelize(
     dbName,
     username,
     password,
-    { host, dialect: 'postgres' }
+    { host, dialect }
   );
 
   try {

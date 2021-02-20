@@ -10,6 +10,8 @@ export class EventController {
   }
 
   async post(req: Request, res: Response) {
+    const promoterId: Number = req.body.promoterId;
+
     try {
       let event: IEvent = {
         id: Date.now().toString(),
@@ -18,7 +20,8 @@ export class EventController {
         description: req.body.description,
         date: new Date(req.body.date),
         ticketPrice: req.body.ticketPrice,
-        address: req.body.address
+        address: req.body.address,
+        promoterId
       } as IEvent;
 
       const result = await this.eventService.createEvent(event)
@@ -30,8 +33,10 @@ export class EventController {
   }
 
   async get(req: Request, res: Response) {
+    const promoterId: number = req.body.promoterId;
+
     try {
-      const data = await this.eventService.listEvents();
+      const data = await this.eventService.listEvents(promoterId);
       return res.status(200).json({ data });
     } catch (error) {
       return res.status(400).json({ error: error.message });
