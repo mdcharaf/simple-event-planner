@@ -3,7 +3,7 @@ import { config } from '../config';
 
 export async function makeDbContext() {
   const dbName = config.database;
-  const username = config.user;
+  const username = config.username;
   const password = config.password;
   const host = config.host;
   const dialect = config.dialect;

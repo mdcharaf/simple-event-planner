@@ -6,6 +6,7 @@ import { IndexRouter } from './http/routes';
 import { config } from './config';
 import bodyParser from 'body-parser';
 import cors from 'cors';
+import { log } from 'console';
 
 async function initializeDb() {
   try {
