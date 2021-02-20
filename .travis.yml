@@ -17,11 +17,11 @@ before_script:
 script:
   - docker --version
   # Builidng Promoters Api
-  - docker build -t sep_promoters-api api/promoters-api/src/.
+  - docker build -t sep_promoters-api api/promoters-api
   - docker tag sep_promoters-api mcharaf/sep_promoters-api:latest
 
   # Building Events Api
-  - docker build -t sep_events-api api/events-api/src/.
+  - docker build -t sep_events-api api/events-api
   - docker tag sep_events-api mcharaf/sep_events-api:latest
 
 after_success:
