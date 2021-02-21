@@ -19,7 +19,7 @@ script:
   - docker --version
   # Builidng Promoters Api
   - docker build -t sep_promoters-api api/promoters-api
-    docker tag sep_promoters-api mcharaf/sep_promoters-api:latest
+  - docker tag sep_promoters-api mcharaf/sep_promoters-api:latest
 
   # Building Events Api
   - docker build -t sep_events-api api/events-api
