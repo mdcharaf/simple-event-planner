@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sep-promoters-api
+  labels:
+    app: sep-promoters-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: sep-promoters-api
+  template:
+    metadata:
+      labels:
+        app: sep-promoters-api
+    spec:
+      containers:
+      - name: sep-promoters-api
+        image: mcharaf/sep_promoters-api:latest
+        ports:
+        - containerPort: 8080
+        envFrom:
+        - configMapRef:
+            name: sep-promoters-api-settings
+        resources:
+          limits:
+            memory: 512Mi
+            cpu: "1"
+          requests:
+            memory: 256Mi
+            cpu: "0.2"
