@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sep-events-api
+  labels:
+    app: sep-events-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: sep-events-api
+  template:
+    metadata:
+      labels:
+        app: sep-events-api
+    spec:
+      containers:
+      - name: sep-events-api
+        image: mcharaf/sep_events-api:latest
+        ports:
+        - containerPort: 8080
+        envFrom:
+        - configMapRef:
+            name: sep-events-api-settings
+        resources:
+          limits:
+            memory: 512Mi
+            cpu: "1"
+          requests:
+            memory: 256Mi
+            cpu: "0.2"
