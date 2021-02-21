@@ -3,11 +3,11 @@ kind: Service
 metadata:
   name: sep-promoters-api
   labels:
-    run: sep-promoters-api
+    app: sep-promoters-api
 spec:
   ports:
   - port: 8080
     targetPort: 8080
     protocol: TCP
   selector:
-    run: sep-promoters-api
+    app: sep-promoters-api
