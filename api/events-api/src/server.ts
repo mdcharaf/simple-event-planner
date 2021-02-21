@@ -30,7 +30,7 @@ function serve(): Express {
       'X-Access-Token', 'Authorization',
     ],
     methods: 'GET,HEAD,OPTIONS,PUT,PATCH,POST,DELETE',
-    origin: config.PORT,
+    origin: '*',
   }));
 
   app.get('/', (req: Request, res: Response) => res.send('Express + TypeScript Server '));
